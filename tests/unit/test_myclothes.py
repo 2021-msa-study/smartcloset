@@ -1,19 +1,16 @@
-
-
 def test_regist_clothes():
-    myclothes=myclothes()
+    myclothes = myclothes()
 
-    clothes=Clothes()
+    clothes = Clothes()
 
     myclothes.regist_clothes(clothes)
 
-    assert len(myclothes.clothes)== 1
+    assert len(myclothes.clothes) == 1
 
 
 def test_modify_clothes():
-    
-    pass
+    raise NotImplementedError
 
 
 def test_remove_clothes():
-    pass
+    raise NotImplementedError
