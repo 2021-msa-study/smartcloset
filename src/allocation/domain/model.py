@@ -2,9 +2,9 @@ from typing import Optional, List, Set
 from datetime import datetime
 
 class Myclothes:
-    def __init__(self, sku: str, batches: List[Batch], version_number: int = 0):
+    def __init__(self):
         
-        clothes=set()
+        self.clothes=set()
 
     def regist_clothes(self ) :
         pass
