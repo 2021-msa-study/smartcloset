@@ -2,11 +2,12 @@ from datetime import datetime
 
 from smartcloset.domain.models import MyClothing, Clothing
 
+
 def test_regist_clothes():
     now = datetime.now()
 
     myclothes = MyClothing()
-    clothing = Clothing('test-id', 'test-maker', 'test-serial', now, 5)
+    clothing = Clothing("test-id", "test-maker", "test-serial", now, 5)
 
     myclothes.regist_clothing(clothing)
 
