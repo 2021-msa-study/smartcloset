@@ -1,12 +1,12 @@
 from __future__ import annotations
-
 from datetime import datetime
 
 
-class MyClothes:
-    '''
+class MyClothing:
+    """
     TODO 무슨용도의 클래스인지 설명을 써주세요.
-    '''
+    """
+
     def __init__(self):
         self.clothings = set[Clothing]()
 
@@ -68,8 +68,10 @@ class Clothing:
         문법적으로는 틀린 표현이지만 `clothings` 로 쓸경우 `set[Clothing]` 같은
         컬렉션 변수로 간주합니다.
     """
-    def __init__(self, id: str, maker: str, serial: str, buydate: datetime,
-                 rating: int):
+
+    def __init__(
+        self, id: str, maker: str, serial: str, buydate: datetime, rating: int
+    ):
         self.id = id
         self.maker = maker
         self.serial = serial
