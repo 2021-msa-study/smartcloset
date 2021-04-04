@@ -1,17 +1,49 @@
 from datetime import datetime
 
-from smartcloset.domain.models import MyClothing, Clothing
+import pytest
+
+from smartcloset.domain.models import Closet, MyClothings, Clothing, Partition
 
 
-def test_regist_clothes():
+@pytest.fixture
+def myclothings():
     now = datetime.now()
 
-    myclothes = MyClothing()
+    myclothings = MyClothings()
     clothing = Clothing("test-id", "test-maker", "test-serial", now, 5)
 
-    myclothes.regist_clothing(clothing)
+    myclothings.add_clothing(clothing)
+    return myclothings
 
-    assert len(myclothes.clothings) == 1
+
+def test_regist_clothes(myclothings: MyClothings):
+    assert len(myclothings.clothings) == 1
+
+
+def test_add_clothing_to_closet(myclothings: MyClothings):
+    """
+    +------------+------------+
+    |            |            |
+    |    (0,0)   |    (1,0)   |
+    +------------|------------+
+    |    (0,1)   |    (1,1)   |
+    |            |            |
+    +------------+------------+
+    """
+    closet = Closet("closet-1", "test-closet")
+    part0_0 = Partition(0, 0)
+    part0_1 = Partition(0, 1)
+    part1_0 = Partition(1, 0)
+    part1_1 = Partition(1, 1)
+
+    closet.add_partition(part0_0)
+    closet.add_partition(part1_0)
+    closet.add_partition(part0_1)
+    closet.add_partition(part1_1)
+    assert 4 == len(closet.partitions)
+
+    myclothings.allocate(part0_0, "test-id")
+    assert 1 == len(closet.clothings)
 
 
 def test_modify_clothes():
