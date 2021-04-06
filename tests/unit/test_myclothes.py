@@ -46,9 +46,12 @@ def test_add_clothing_to_closet(myclothings: MyClothings):
     assert 1 == len(closet.clothings)
 
 
-def test_modify_clothes():
-    raise NotImplementedError
+def test_modify_clothes(myclothings: MyClothings):
+    myclothings.update_clothing("test-id", maker="test-maker2", serial="test-serial2")
+    assert myclothings.clothings["test-id"].maker == "test-maker2"
+    assert myclothings.clothings["test-id"].serial == "test-serial2"
 
 
-def test_remove_clothes():
-    raise NotImplementedError
+def test_remove_clothes(myclothings: MyClothings):
+    myclothings.remove_clothing("test-id")
+    assert 0 == len(myclothings.clothings)
