@@ -32,9 +32,9 @@ class MyClothings:
         assert clothing_id in self.clothings
         clothing = self.clothings[clothing_id]
         assert partition.closet
-        assert clothing_id not in partition.closet.clothings
+        assert clothing_id not in partition.clothings
 
-        partition.closet.alloc_clothing(clothing)
+        partition.alloc_clothing(clothing)
 
 
 class Closet:
@@ -48,11 +48,14 @@ class Closet:
         self.id = id
         self.name = name  # 옷장이름
         self.partitions = set[Partition]()  # 옷칸
-        self.clothings = set[Clothing]()  # 옷장내 옷
 
     @property
     def number_of_clothes(self):
-        return len(self.clothings)
+        cnt = 0
+        for partition in self.partitions:
+            cnt += len(partition.clothings)
+
+        return cnt
 
     @property
     def number_of_parts(self):
@@ -66,12 +69,6 @@ class Closet:
         self.partitions.remove(partition)
         partition.closet = self
 
-    def alloc_clothing(self, clothing: Clothing):
-        self.clothings.add(clothing)
-
-    def dealloc_clothing(self, clothing: Clothing):
-        self.clothings.remove(clothing)
-
 
 class Partition:
     """
@@ -84,6 +81,13 @@ class Partition:
         self.x = x
         self.y = y
         self.closet = closet
+        self.clothings = set[Clothing]()  # 옷장내 옷
+
+    def alloc_clothing(self, clothing: Clothing):
+        self.clothings.add(clothing)
+
+    def dealloc_clothing(self, clothing: Clothing):
+        self.clothings.remove(clothing)
 
 
 class Clothing:

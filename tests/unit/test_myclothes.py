@@ -43,7 +43,7 @@ def test_add_clothing_to_closet(myclothings: MyClothings):
     assert 4 == len(closet.partitions)
 
     myclothings.allocate(part0_0, "test-id")
-    assert 1 == len(closet.clothings)
+    assert 1 == closet.number_of_clothes
 
 
 def test_modify_clothes(myclothings: MyClothings):
