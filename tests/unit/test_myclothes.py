@@ -7,17 +7,21 @@ from smartcloset.domain.models import Closet, MyClothings, Clothing, Partition
 
 @pytest.fixture
 def myclothings():
-    now = datetime.now()
 
     myclothings = MyClothings()
-    clothing = Clothing("test-id", "test-maker", "test-serial", now, 5)
+    now = datetime.now()
+    clothing01 = Clothing("test-id01", "test-maker01", "test-serial01", now, 5)
+    myclothings.add_clothing(clothing01)
 
-    myclothings.add_clothing(clothing)
+    now = datetime.now()
+    clothing02 = Clothing("test-id02", "test-maker02", "test-serial02", now, 4)
+    myclothings.add_clothing(clothing02)
+
     return myclothings
 
 
 def test_regist_clothes(myclothings: MyClothings):
-    assert len(myclothings.clothings) == 1
+    assert len(myclothings.clothings) == 2
 
 
 def test_add_clothing_to_closet(myclothings: MyClothings):
@@ -42,16 +46,24 @@ def test_add_clothing_to_closet(myclothings: MyClothings):
     closet.add_partition(part1_1)
     assert 4 == len(closet.partitions)
 
-    myclothings.allocate(part0_0, "test-id")
+    myclothings.allocate(part0_0, "test-id01")
+    assert 1 == closet.number_of_clothes
+
+    myclothings.allocate(part0_1, "test-id02")
+    assert 2 == closet.number_of_clothes
+
+    myclothings.deallocate(part0_0, "test-id01")
     assert 1 == closet.number_of_clothes
 
 
 def test_modify_clothes(myclothings: MyClothings):
-    myclothings.update_clothing("test-id", maker="test-maker2", serial="test-serial2")
-    assert myclothings.clothings["test-id"].maker == "test-maker2"
-    assert myclothings.clothings["test-id"].serial == "test-serial2"
+    myclothings.update_clothing(
+        "test-id01", maker="test-maker03", serial="test-serial03"
+    )
+    assert myclothings.clothings["test-id01"].maker == "test-maker03"
+    assert myclothings.clothings["test-id01"].serial == "test-serial03"
 
 
 def test_remove_clothes(myclothings: MyClothings):
-    myclothings.remove_clothing("test-id")
-    assert 0 == len(myclothings.clothings)
+    myclothings.remove_clothing("test-id01")
+    assert 1 == len(myclothings.clothings)

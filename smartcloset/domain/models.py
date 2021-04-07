@@ -36,6 +36,14 @@ class MyClothings:
 
         partition.alloc_clothing(clothing)
 
+    def deallocate(self, partition: Partition, clothing_id: str):
+        assert clothing_id in self.clothings
+        clothing = self.clothings[clothing_id]
+        assert partition.closet
+        assert clothing in partition.clothings
+
+        partition.dealloc_clothing(clothing)
+
 
 class Closet:
     """옷장- 대분류.
