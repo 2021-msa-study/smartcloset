@@ -13,18 +13,18 @@ class MyClothings:
     def __init__(self):
         self.clothings = dict[str, Clothing]()
 
-    def add_clothing(self, clothing: Clothing):
+    def add(self, clothing: Clothing):
         assert clothing.id not in self.clothings
         self.clothings[clothing.id] = clothing
 
-    def update_clothing(self, id: str, **kwargs):  # type: ignore
+    def update(self, id: str, **kwargs):  # type: ignore
         assert id in self.clothings
         clothing = self.clothings[id]
 
         for key, value in kwargs.items():  # type: ignore
             setattr(clothing, key, value)
 
-    def remove_clothing(self, id: str):
+    def remove(self, id: str):
         assert id in self.clothings
         del self.clothings[id]
 
@@ -34,7 +34,7 @@ class MyClothings:
         assert partition.closet
         assert clothing_id not in partition.clothings
 
-        partition.alloc_clothing(clothing)
+        partition.allocate(clothing)
 
     def deallocate(self, partition: Partition, clothing_id: str):
         assert clothing_id in self.clothings
@@ -42,7 +42,7 @@ class MyClothings:
         assert partition.closet
         assert clothing in partition.clothings
 
-        partition.dealloc_clothing(clothing)
+        partition.deallocate(clothing)
 
 
 class Closet:
@@ -91,10 +91,10 @@ class Partition:
         self.closet = closet
         self.clothings = set[Clothing]()  # 옷장내 옷
 
-    def alloc_clothing(self, clothing: Clothing):
+    def allocate(self, clothing: Clothing):
         self.clothings.add(clothing)
 
-    def dealloc_clothing(self, clothing: Clothing):
+    def deallocate(self, clothing: Clothing):
         self.clothings.remove(clothing)
 
 

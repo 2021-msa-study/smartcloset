@@ -11,11 +11,11 @@ def myclothings():
     myclothings = MyClothings()
     now = datetime.now()
     clothing01 = Clothing("test-id01", "test-maker01", "test-serial01", now, 5)
-    myclothings.add_clothing(clothing01)
+    myclothings.add(clothing01)
 
     now = datetime.now()
     clothing02 = Clothing("test-id02", "test-maker02", "test-serial02", now, 4)
-    myclothings.add_clothing(clothing02)
+    myclothings.add(clothing02)
 
     return myclothings
 
@@ -57,13 +57,11 @@ def test_add_clothing_to_closet(myclothings: MyClothings):
 
 
 def test_modify_clothes(myclothings: MyClothings):
-    myclothings.update_clothing(
-        "test-id01", maker="test-maker03", serial="test-serial03"
-    )
+    myclothings.update("test-id01", maker="test-maker03", serial="test-serial03")
     assert myclothings.clothings["test-id01"].maker == "test-maker03"
     assert myclothings.clothings["test-id01"].serial == "test-serial03"
 
 
 def test_remove_clothes(myclothings: MyClothings):
-    myclothings.remove_clothing("test-id01")
+    myclothings.remove("test-id01")
     assert 1 == len(myclothings.clothings)
