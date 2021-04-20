@@ -5,7 +5,7 @@ from fastmsa.domain import Aggregate
 from smartcloset.domain.models import Clothing
 
 
-class Maker(Aggregate[Clothing]):
+class Basket(Aggregate[Clothing]):
     class Meta:
         entity_class = Clothing
 

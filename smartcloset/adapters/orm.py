@@ -17,7 +17,7 @@ from sqlalchemy.orm import (
 from sqlalchemy.sql.sqltypes import DateTime, Integer
 
 from smartcloset.domain.models import Clothing
-from smartcloset.domain.aggregates import Maker
+from smartcloset.domain.aggregates import Basket
 
 
 def init_mappers(metadata: MetaData) -> MetaData:
@@ -27,7 +27,7 @@ def init_mappers(metadata: MetaData) -> MetaData:
         "clothing",
         metadata,
         Column("id", String(255), primary_key=True),
-        Column("maker", String(255), ForeignKey("maker.maker")),
+        Column("maker", String(255), ForeignKey("basket.maker")),
         Column("serial", String(255)),
         Column("buydate", DateTime),
         Column("rating", Integer),
@@ -40,14 +40,14 @@ def init_mappers(metadata: MetaData) -> MetaData:
     )
 
     # Aggregate 매핑 추가
-    maker = Table(
-        "maker",
+    basket = Table(
+        "basket",
         metadata,
         Column("maker", String(255), primary_key=True),
         Column("version_number", Integer, nullable=False, server_default="0"),
         extend_existing=True,
     )
 
-    mapper(Maker, maker, properties={"items": relationship(Clothing)})
+    mapper(Basket, basket, properties={"items": relationship(Clothing)})
 
     return metadata

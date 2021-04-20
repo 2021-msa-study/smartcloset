@@ -21,7 +21,7 @@ from fastmsa.test.e2e import FlaskServerThread
 from fastmsa import FastMSA
 
 
-from smartcloset.domain.aggregates import Maker
+from smartcloset.domain.aggregates import Basket
 from smartcloset.adapters.orm import init_mappers
 
 # from tests.app.domain.aggregates import Product
