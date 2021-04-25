@@ -1,82 +1,117 @@
 from __future__ import annotations
+from dataclasses import dataclass
 from datetime import datetime
+from typing import Optional
 
 
-class MyClothing:
-    """
-    TODO 무슨용도의 클래스인지 설명을 써주세요.
+class MyClothings:
+    """유저가 가진 모든 옷.
+
+    MyClothing 은 유저당 하나씩 생성
+    옷장으로 분류되기전 본인이 등록한 모든 옷 개체를 가지고있음
     """
 
     def __init__(self):
-        self.clothings = set[Clothing]()
+        self.clothings = dict[str, Clothing]()
 
-    def regist_clothing(self, clothing: Clothing):
-        self.clothings.add(clothing)
+    def add(self, clothing: Clothing):
+        assert clothing.id not in self.clothings
+        self.clothings[clothing.id] = clothing
 
-    def modify_clothing(self, id: str, clothing: Clothing):
-        # XXX clothing 의 정의가 `set` 이었는데 갑자기 `dict` 처럼 잘못 쓰입니다.
-        self.clothings[id].set(clothing)
+    def update(self, id: str, **kwargs):  # type: ignore
+        assert id in self.clothings
+        clothing = self.clothings[id]
 
-    def remove_closets(self, id: str):
-        # XXX `set[Clothing]` 인데 문자열을 삭제하려고 잘못 시도합니다.
-        self.clothings.remove(id)
+        for key, value in kwargs.items():  # type: ignore
+            setattr(clothing, key, value)
+
+    def remove(self, id: str):
+        assert id in self.clothings
+        del self.clothings[id]
+
+    def allocate(self, partition: Partition, clothing_id: str):
+        assert clothing_id in self.clothings
+        clothing = self.clothings[clothing_id]
+        assert partition.closet
+        assert clothing_id not in partition.clothings
+
+        partition.allocate(clothing)
+
+    def deallocate(self, partition: Partition, clothing_id: str):
+        assert clothing_id in self.clothings
+        clothing = self.clothings[clothing_id]
+        assert partition.closet
+        assert clothing in partition.clothings
+
+        partition.deallocate(clothing)
 
 
 class Closet:
+    """옷장- 대분류.
+
+    개인의 다양한 대분류에 따라 최대 5개까지 생성가능
+    예시2) 옷장 : 옷장("2020년컬렉션, 2021컬렉션") - 옷칸("봄옷, 여름옷, 가을옷, 겨울옷)
+    """
+
     def __init__(self, id: str, name: str):
         self.id = id
         self.name = name  # 옷장이름
-        self.parts = set[Part]()  # 옷칸
-        self.clothings = set[Clothing]()  # 옷장내 옷
+        self.partitions = set[Partition]()  # 옷칸
 
     @property
     def number_of_clothes(self):
-        return len(self.clothings)
+        cnt = 0
+        for partition in self.partitions:
+            cnt += len(partition.clothings)
+
+        return cnt
 
     @property
     def number_of_parts(self):
-        return len(self.parts)
+        return len(self.partitions)
 
-    def in_parts(self, part: Part):
-        self.parts.add(part)
+    def add_partition(self, partition: Partition):
+        self.partitions.add(partition)
+        partition.closet = self
 
-    def out_parts(self, id: str):
-        # XXX `set[Part]` 인데 문자열을 삭제하려고 잘못 시도합니다.
-        self.parts.remove(id)
+    def remove_partition(self, partition: Partition):
+        self.partitions.remove(partition)
+        partition.closet = self
 
 
-class Part:
-    def __init__(self, x: int, y: int):
+class Partition:
+    """
+    TODO    옷칸- 소분류
+        옷칸"은 "장" 소분류로 옷장당 최대 10칸 생성가능
+        예시1) 옷장 : 옷장("봄,여름,가을,겨울") - 옷칸(ex: "상의,하의, 속옷")
+    """
+
+    def __init__(self, x: int, y: int, closet: Optional[Closet] = None):
         self.x = x
         self.y = y
-        self.clothings = set[Clothing]()
+        self.closet = closet
+        self.clothings = set[Clothing]()  # 옷장내 옷
 
-    def in_clothes(self, clothing: Clothing):
+    def allocate(self, clothing: Clothing):
         self.clothings.add(clothing)
 
-    def out_clothes(self, clothing: Clothing):
+    def deallocate(self, clothing: Clothing):
         self.clothings.remove(clothing)
 
 
+@dataclass
 class Clothing:
-    """옷 클래스
-
-    참고:
-        `Clothes` 나 `Clothing` 이나 단수/복수 구분이 없는 명사지만
-        `Clothes` 는 기본 형태가 복수형의 형태라서 컬렉션에 변수를 이름짓기 어렵습니다.
-        이런 이유로 `Clothing` 이라는 이름으로 변경했습니다.
-        문법적으로는 틀린 표현이지만 `clothings` 로 쓸경우 `set[Clothing]` 같은
-        컬렉션 변수로 간주합니다.
+    """
+    TODO 옷
+    동일 옷 entity는  n개의 옷장에  속할수 있음.
+    같은 옷장안에서 동일 옷 entity는 1개의 옷칸에만 속할 수있음
     """
 
-    def __init__(
-        self, id: str, maker: str, serial: str, buydate: datetime, rating: int
-    ):
-        self.id = id
-        self.maker = maker
-        self.serial = serial
-        self.buydate = buydate
-        self.rating = rating
+    id: str
+    maker: str
+    serial: str
+    buydate: datetime
+    rating: int
 
     def set(self, clothing: Clothing):
         self.maker = clothing.maker
