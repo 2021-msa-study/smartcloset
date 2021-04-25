@@ -1,4 +1,3 @@
-from __future__ import annotations
 from dataclasses import dataclass, field
 
 from fastmsa.domain import Aggregate
@@ -6,7 +5,7 @@ from fastmsa.domain import Aggregate
 from smartcloset.domain.models import Clothing
 
 
-@dataclass
+@dataclass  # type: ignore
 class Basket(Aggregate[Clothing]):
     maker: str
     items: list[Clothing] = field(default_factory=list)
