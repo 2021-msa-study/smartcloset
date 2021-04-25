@@ -1,14 +1,26 @@
 """FastAPI 엔드포인트 라우팅 모듈입니다."""
 from datetime import datetime
-from smartcloset.domain.models import Clothing, MyClothings
 
 from fastmsa.api import get
-from fastmsa.schema import Field, schema_from
+from fastmsa.uow import SqlAlchemyUnitOfWork
+from fastmsa.schema import Field, schema_from, BaseModel
+
+from ..domain.models import Clothing, MyClothings
+from ..domain.aggregates import Basket
 
 
 @schema_from(Clothing)
 class ClothingReadSchema:
     rating: int = Field(..., description="1~5점 사이로 매겨진 평점")
+
+
+class BasketReadSchema(BaseModel):
+    maker: str
+    items: list[ClothingReadSchema] = Field(default_factory=list)
+    version_number: int = Field(default=0)
+
+    class Config:
+        orm_mode = True
 
 
 @get("/myclothings", response_model=dict[str, ClothingReadSchema])
@@ -26,26 +38,10 @@ def read_myclothings():
     return myclothings.clothings
 
 
-"""
-from smartcloset.domain.models import Clothing
-from smartcloset.domain.aggregates import Clothings
-
-
-class ClothingAdd(BaseModel):
-    id: str
-    maker: str
-    serial: str
-
-
-@post("/clothings")
-def add_clothing(req: ClothingAdd):
-    with SqlAlchemyUnitOfWork(Clothigns) as uow:
-        product = uow.repo.get(req.sku)
-        if product:
-            line = OrderLine(req.orderid, req.sku, req.qty)
-            batchref = product.allocate(line)
-            uow.commit()
-
-        return {"batchref": batchref}
-
-"""
+@get("/baskets/test", response_model=list[BasketReadSchema])
+def read_test_baskets():
+    with SqlAlchemyUnitOfWork(Basket) as uow:
+        baskets = uow.repo.all()
+        print(baskets)
+        return baskets
+    ...
