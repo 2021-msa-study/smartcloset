@@ -1,12 +1,12 @@
 # pylint: disable=protected-access
 from smartcloset.domain.aggregates import Basket
-from smartcloset.domain.models import Closet, MyClothings, Clothing, Partition
+from smartcloset.domain.models import Clothing
 
 from datetime import datetime
 
 from sqlalchemy.orm import Session
 
-from fastmsa.repository import SqlAlchemyRepository
+from fastmsa.repo import SqlAlchemyRepository
 
 
 def test_repository_can_save_a_clothing(session: Session) -> None:
@@ -16,7 +16,7 @@ def test_repository_can_save_a_clothing(session: Session) -> None:
 
     basket = Basket(clothing.maker, [clothing])
 
-    repo = SqlAlchemyRepository(basket, session)
+    repo = SqlAlchemyRepository(Basket, session)
     repo.add(basket)
     session.commit()
 

@@ -99,7 +99,7 @@ class Partition:
         self.clothings.remove(clothing)
 
 
-@dataclass
+@dataclass(unsafe_hash=True)
 class Clothing:
     """
     TODO 옷
