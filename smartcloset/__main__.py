@@ -1,13 +1,9 @@
-from fastmsa.core import FastMsa, AbstractConfig
-from fastmsa.api import init_app
+from fastmsa.command import FastMSACommand
+from fastmsa.api import app
 
-class MyConfig(AbstractConfig):
-    def get_db_url(self):
-        return "sqlite://"
+cmd = FastMSACommand()
+msa = cmd.init_app()
 
-def init_routes(msa: FastMsa, app: FastAPI):
-    from smartcloset.routes import clothing
+if __name__ == "__main__":
+    cmd.run()
 
-msa = FastMsa(MyConfig()))
-init_app(msa, init_routes)
-msa.run()

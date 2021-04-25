@@ -17,5 +17,6 @@
     ],
     "python.formatting.provider": "black",
     "python.analysis.typeCheckingMode": "strict",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "python.pythonPath": "/home/cloud/conda/envs/smartcloset/bin/python"
 }

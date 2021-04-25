@@ -1,4 +1,5 @@
 from __future__ import annotations
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
@@ -98,6 +99,7 @@ class Partition:
         self.clothings.remove(clothing)
 
 
+@dataclass
 class Clothing:
     """
     TODO 옷
@@ -105,14 +107,11 @@ class Clothing:
     같은 옷장안에서 동일 옷 entity는 1개의 옷칸에만 속할 수있음
     """
 
-    def __init__(
-        self, id: str, maker: str, serial: str, buydate: datetime, rating: int
-    ):
-        self.id = id
-        self.maker = maker
-        self.serial = serial
-        self.buydate = buydate
-        self.rating = rating
+    id: str
+    maker: str
+    serial: str
+    buydate: datetime
+    rating: int
 
     def set(self, clothing: Clothing):
         self.maker = clothing.maker
