@@ -1,15 +1,26 @@
+from datetime import datetime
+
 from fastmsa.uow import AbstractUnitOfWork
 
+from ..domain.aggregates import Basket
+from ..domain.models import Clothing
+
+
 def add(
-    ref: str, maker: str, qty: int, AbstractUnitOfWork[Clothings]
-) -> None:
+    id: str,
+    maker: str,
+    serial: str,
+    buydate: datetime,
+    rating: int,
+    uow: AbstractUnitOfWork[Basket],
+):
     """UOW를 이용해 배치를 추가합니다."""
     with uow:
-        clothings = uow.repo.get(maker)
+        basket = uow.repo.get(maker)
 
-        if not clothings:
-            clothings = Clothings(maker, items=[])
-            uow.repo.add(clothings)
+        if not basket:
+            basket = Basket(maker, items=[])
+            uow.repo.add(basket)
 
-        clothings.items.append(Clothing(...))
+        basket.items.append(Clothing(id, maker, serial, buydate, rating))
         uow.commit()
