@@ -28,6 +28,7 @@ class BasketReadSchema:
             orm_mode = True
     """
 
+
 @app.get("/myclothings", response_model=dict[str, ClothingReadSchema])
 def read_myclothings():
     now = datetime.now()
@@ -45,8 +46,6 @@ def read_myclothings():
 
 @app.get("/baskets/test", response_model=list[BasketReadSchema])
 def read_test_baskets():
-    with SqlAlchemyUnitOfWork(Basket) as uow:
-        baskets = uow.repo.all()
-        print(baskets)
+    with SqlAlchemyUnitOfWork([Basket]) as uow:
+        baskets = uow[Basket].all()
         return baskets
-    ...
