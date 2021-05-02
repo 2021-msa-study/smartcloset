@@ -1,6 +1,6 @@
 """FastMSA App Configuration."""
 
-from fastmsa.core import FastMSA
+from fastmsa.config import FastMSA
 
 
 class Config(FastMSA):
@@ -10,6 +10,14 @@ class Config(FastMSA):
     """
 
     title = "Smart Closet"
+    allow_external_event = True
+
+    @property
+    def uow(self):
+        from fastmsa.uow import SqlAlchemyUnitOfWork
+        from smartcloset.domain.aggregates import Basket
+
+        return SqlAlchemyUnitOfWork([Basket])
 
     def get_db_url(self) -> str:
         """SqlAlchemy 에서 사용 가능한 형식의 DB URL을 리턴합니다.

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from fastmsa.domain import Aggregate
+from fastmsa.core import Aggregate
 
 from smartcloset.domain.models import Clothing
 

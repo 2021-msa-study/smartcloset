@@ -28,7 +28,10 @@ class BasketReadSchema:
             orm_mode = True
     """
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 @app.get("/myclothings", response_model=dict[str, ClothingReadSchema])
 def read_myclothings():
     now = datetime.now()
