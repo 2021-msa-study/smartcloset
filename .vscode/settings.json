@@ -19,5 +19,5 @@
     "python.formatting.provider": "black",
     "python.analysis.typeCheckingMode": "strict",
     "editor.formatOnSave": true,
-    "python.pythonPath": "${workplaceFolder}/.venv/smartcloset"
+    "python.pythonPath": "${workspaceFolder}/.venv/smartcloset"
 }
