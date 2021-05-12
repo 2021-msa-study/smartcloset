@@ -1,6 +1,6 @@
 """FastMSA App Configuration."""
 
-from fastmsa.core import FastMSA
+from fastmsa.config import FastMSA
 
 
 class Config(FastMSA):
@@ -27,3 +27,19 @@ class Config(FastMSA):
         """
         # TODO: 메모리 DB 대신 실제 DB URL로 변경하세요.
         return "sqlite://"
+
+    @property
+    def uow(self):
+        from fastmsa.uow import SqlAlchemyUnitOfWork
+        from fastmsa.repo import SqlAlchemyRepository
+        from smartcloset.domain.aggregates import Basket
+        from fastmsa.uow import RepoMakerDict
+
+
+        repo_maker: RepoMakerDict = {
+        Basket: lambda session: SqlAlchemyRepository(Basket, session)
+        }
+
+
+
+        return SqlAlchemyUnitOfWork([Basket], repo_maker=repo_maker)

@@ -16,7 +16,6 @@
         "--convention=google"
     ],
     "python.formatting.provider": "black",
-    "python.analysis.typeCheckingMode": "strict",
-    "editor.formatOnSave": true,
-    "python.pythonPath": "/home/cloud/conda/envs/smartcloset/bin/python"
+    "python.analysis.typeCheckingMode": "basic",
+    "editor.formatOnSave": true
 }
