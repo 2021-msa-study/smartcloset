@@ -1,5 +1,4 @@
-git+https://github.com/2021-msa-study/fastmsa.git@01-kickoff-setup
-
+fastmsa>=0.2
 black
 pytest
 pydocstyle

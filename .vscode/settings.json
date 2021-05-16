@@ -3,6 +3,7 @@
         "**/__pycache__": true,
         "**/.ipynb_checkpoints": true,
         "**/.mypy_cache": true,
+        "**/.venv": true,
         "**/.pytest_cache": true
     },
     "python.testing.pytestArgs": [
@@ -18,5 +19,5 @@
     "python.formatting.provider": "black",
     "python.analysis.typeCheckingMode": "strict",
     "editor.formatOnSave": true,
-    "python.pythonPath": "/home/cloud/conda/envs/smartcloset/bin/python"
+    "python.pythonPath": "${workspaceFolder}/.venv/smartcloset"
 }
