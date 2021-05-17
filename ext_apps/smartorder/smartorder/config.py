@@ -9,8 +9,23 @@ class Config(FastMSA):
     설정 가능한 모든 항목들은 `FastMSA` 클래스 정의를 참고하세요.
     """
 
-    title = "Smart Closet"
+    title = "Smartorder"
     allow_external_event = True
+
+    def get_api_port(self) -> int:
+        return 5001
+
+    @property
+    def uow(self):
+        from fastmsa.uow import SqlAlchemyUnitOfWork, RepoMakerDict
+        from fastmsa.repo import SqlAlchemyRepository
+        from smartorder.domain.aggregates import Product
+
+        repo_maker: RepoMakerDict = {
+            Product: lambda session: SqlAlchemyRepository(Product, session)
+        }
+
+        return SqlAlchemyUnitOfWork([Product], repo_maker=repo_maker)
 
     def get_db_url(self) -> str:
         """SqlAlchemy 에서 사용 가능한 형식의 DB URL을 리턴합니다.
@@ -28,16 +43,3 @@ class Config(FastMSA):
         """
         # TODO: 메모리 DB 대신 실제 DB URL로 변경하세요.
         return "sqlite://"
-
-    @property
-    def uow(self):
-        from fastmsa.uow import SqlAlchemyUnitOfWork
-        from fastmsa.repo import SqlAlchemyRepository
-        from smartcloset.domain.aggregates import Basket
-        from fastmsa.uow import RepoMakerDict
-
-        repo_maker: RepoMakerDict = {
-            Basket: lambda session: SqlAlchemyRepository(Basket, session)
-        }
-
-        return SqlAlchemyUnitOfWork([Basket], repo_maker=repo_maker)
